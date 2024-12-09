@@ -7,7 +7,7 @@
         <script>
             AFRAME.registerComponent('clip-plane', {
                 schema: {
-                    plane: {type: 'vec4', default: {x: 0, y: 1, z: 0, w: 0}} // y-plane as default
+                    plane: {type: 'vec4', default: {x: 0, y: 1, z: 0, w: 0}} // Default clipping along Y axis
                 },
                 init: function () {
                     this.mesh = null;
@@ -17,10 +17,11 @@
                     });
                 },
                 tick: function () {
-                    if (!this.mesh) return;
+                    if (!this.mesh) return; // Wait until the mesh is loaded
+
                     this.mesh.traverse((node) => {
                         if (node.isMesh) {
-                            // Update the clipping plane based on the given direction
+                            // Update the clipping plane each frame to apply dynamic clipping
                             node.material.clippingPlanes = [
                                 new THREE.Plane(
                                     new THREE.Vector3(this.data.plane.x, this.data.plane.y, this.data.plane.z),
@@ -28,7 +29,7 @@
                                 )
                             ];
                             node.material.clipShadows = true; // Enable shadow clipping
-                            node.material.needsUpdate = true; // Update material to reflect the changes
+                            node.material.needsUpdate = true; // Update material every frame
                         }
                     });
                 }
@@ -68,8 +69,12 @@
                 <a-entity
                     id="bowser-model"
                     scale="1.1570724027693717 1.1570724027693717 1.1570724027693717"
-                    clip-plane="plane: 0 0 1 0"
+                    rotation="-90 0 0"
+                    position="0 0 1"
+                    animation-mixer="loop: repeat"
                     gltf-model="#animated-asset"
+                    class="clickable"
+                    clip-plane="plane: 0 0 1 0" 
                 ></a-entity>
             </a-marker>
         </a-scene>
