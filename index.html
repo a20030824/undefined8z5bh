@@ -6,6 +6,7 @@
         <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
         <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
         <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+        <script src="https://unpkg.com/aframe-clip-plane-component@latest/dist/aframe-clip-plane-component.min.js"></script>
     </head>
 
     <body style="margin: 0; overflow: hidden;">
@@ -38,11 +39,13 @@
                 <a-entity
                     id="bowser-model"
                     scale="1.1570724027693717 1.1570724027693717 1.1570724027693717"
+                    rotation="-90 0 0" 
                     animation-mixer="loop: repeat"
                     gltf-model="#animated-asset"
                     class="clickable"
                     gesture-handler
                 ></a-entity>
+                <a-clip-plane position="0 1 0" rotation="90 0 0" width="2" height="2"></a-clip-plane>
             </a-marker>
 
             <a-entity camera></a-entity>
