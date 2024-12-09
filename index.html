@@ -58,6 +58,10 @@
                 raycaster="objects: .clickable"
                 emitevents="true"
                 cursor="fuse: false; rayOrigin: mouse;"
+                smooth="true"
+                smoothCount="1000"
+                smoothTolerance=".001"
+                smoothThreshold="20"
             >
                 <a-entity
                     id="bowser-model"
@@ -67,7 +71,7 @@
                     gltf-model="#animated-asset"
                     class="clickable"
                     gesture-handler
-                    clip-plane="plane: 1 0 0 0" <!-- 定义剪裁平面 -->
+                    clip-plane="plane: 1 0 0 0" 
                 ></a-entity>
             </a-marker>
 
