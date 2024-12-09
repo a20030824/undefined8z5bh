@@ -6,14 +6,38 @@
         <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
         <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
         <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
-        
+        <script>
+            AFRAME.registerComponent('clip-plane', {
+                schema: {
+                    plane: {type: 'vec4', default: {x: 0, y: 1, z: 0, w: 0}} // y-plane as default
+                },
+                init: function () {
+                    const el = this.el;
+                    el.addEventListener('model-loaded', () => {
+                        const mesh = el.getObject3D('mesh');
+                        mesh.traverse((node) => {
+                            if (node.isMesh) {
+                                node.material.clippingPlanes = [
+                                    new THREE.Plane(
+                                        new THREE.Vector3(this.data.plane.x, this.data.plane.y, this.data.plane.z),
+                                        this.data.plane.w
+                                    )
+                                ];
+                                node.material.clipShadows = true;
+                                node.material.needsUpdate = true;
+                            }
+                        });
+                    });
+                }
+            });
+        </script>
     </head>
 
     <body style="margin: 0; overflow: hidden;">
         <a-scene
             vr-mode-ui="enabled: false;"
             loading-screen="enabled: false;"
-            renderer="logarithmicDepthBuffer: true;"
+            renderer="logarithmicDepthBuffer: true; alpha: true; antialias: true; clippingPlanes: [];"
             arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
             id="scene"
             embedded
@@ -34,18 +58,17 @@
                 raycaster="objects: .clickable"
                 emitevents="true"
                 cursor="fuse: false; rayOrigin: mouse;"
-                id="markerA"
             >
                 <a-entity
                     id="bowser-model"
                     scale="1.1570724027693717 1.1570724027693717 1.1570724027693717"
-                    rotation="-90 0 0" 
+                    rotation="-90 0 0"
                     animation-mixer="loop: repeat"
                     gltf-model="#animated-asset"
                     class="clickable"
                     gesture-handler
+                    clip-plane="plane: 0 1 0 0" <!-- 定义剪裁平面 -->
                 ></a-entity>
-                
             </a-marker>
 
             <a-entity camera></a-entity>
